@@ -15,14 +15,18 @@ import Settings from './pages/Settings';
 import { VendorProvider } from './context/VendorContext';
 import { DriverProvider } from './context/DriverContext';
 import { VehicleProvider } from './context/VehicleContext';
+import { DocumentProvider } from './context/DocumentContext';
+import { DelegationProvider } from './context/DelegationContext';
 
 function App() {
   return (
     <VendorProvider>
       <DriverProvider>
         <VehicleProvider>
-          <Router>
-            <Routes>
+          <DocumentProvider>
+            <DelegationProvider>
+              <Router>
+                <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
@@ -40,6 +44,8 @@ function App() {
         </Route>
       </Routes>
     </Router>
+            </DelegationProvider>
+          </DocumentProvider>
         </VehicleProvider>
       </DriverProvider>
     </VendorProvider>
