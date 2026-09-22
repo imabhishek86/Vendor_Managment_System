@@ -1,6 +1,6 @@
 import { getExpiryStatus } from '../../utils/dateStatus';
 
-export default function ComplianceStatusBadge({ date, type = 'default' }) {
+export default function ComplianceStatusBadge({ date }) {
   const status = getExpiryStatus(date);
   
   let config = {

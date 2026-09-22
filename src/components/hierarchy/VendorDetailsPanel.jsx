@@ -1,4 +1,4 @@
-import { Building2, Mail, Phone, Calendar, Users, Car, MapPin, Shield } from 'lucide-react';
+import { Building2, Mail, Phone, Calendar, Users, Car } from 'lucide-react';
 
 export default function VendorDetailsPanel({ vendor }) {
   if (!vendor) {

@@ -11,15 +11,6 @@ export default function VendorNode({ vendor, level = 0, onSelect, selectedId, on
     setIsExpanded(!isExpanded);
   };
 
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'Active': return <CheckCircle2 className="w-4 h-4 text-green-500" />;
-      case 'Pending': return <Clock className="w-4 h-4 text-amber-500" />;
-      case 'Suspended': return <AlertCircle className="w-4 h-4 text-red-500" />;
-      default: return null;
-    }
-  };
-
   const getStatusColor = (status) => {
     switch (status) {
       case 'Active': return 'bg-green-50 text-green-700 ring-green-600/20';

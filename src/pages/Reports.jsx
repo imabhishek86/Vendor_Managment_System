@@ -1,4 +1,4 @@
-import { Activity, TrendingUp, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Activity, TrendingUp } from 'lucide-react';
 
 export default function Reports() {
   const metrics = [

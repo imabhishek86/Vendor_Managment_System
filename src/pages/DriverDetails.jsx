@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, UserCircle2, Mail, Phone, Building2, Car, ShieldCheck, FileText, Star, Clock } from 'lucide-react';
+import { ArrowLeft, UserCircle2, Mail, Phone, Building2, Car, ShieldCheck, Star, Clock } from 'lucide-react';
 import { useDriverContext } from '../context/DriverContext';
 import { useVendorContext } from '../context/VendorContext';
 import { mockVehicles } from '../data/mockVehicles';

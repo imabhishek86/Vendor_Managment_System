@@ -76,9 +76,17 @@ export default function Documents() {
 
   // Filtered Data
   const filteredDocs = useMemo(() => {
+    // Helper to get entity name inside useMemo
+    const getEntityNameStr = (doc) => {
+      if (doc.entityType === 'driver') {
+        return drivers.find(d => d.id === doc.entityId)?.name || doc.entityId;
+      }
+      return vehicles.find(v => v.id === doc.entityId)?.licensePlate || doc.entityId;
+    };
+
     return documents.filter(doc => {
       const searchLower = searchQuery.toLowerCase();
-      const entityName = getEntityName(doc).toLowerCase();
+      const entityName = getEntityNameStr(doc).toLowerCase();
       const vendorName = vendors.find(v => v.id === doc.vendorId)?.name?.toLowerCase() || '';
 
       const matchesSearch = 
@@ -97,7 +105,7 @@ export default function Documents() {
 
       return matchesSearch && matchesEntity && matchesType && matchesVendor && matchesStatus;
     });
-  }, [documents, searchQuery, entityFilter, typeFilter, vendorFilter, statusFilter, getResolvedStatus]);
+  }, [documents, searchQuery, entityFilter, typeFilter, vendorFilter, statusFilter, getResolvedStatus, vendors, drivers, vehicles]);
 
   // Handlers
   const handleUploadSubmit = (data) => {

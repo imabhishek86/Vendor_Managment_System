@@ -66,10 +66,12 @@ export default function Delegation() {
 
   // Filtered Data
   const filteredDelegations = useMemo(() => {
+    const getVendorNameStr = (id) => vendors.find(v => v.id === id)?.name || id;
+
     return delegations.filter(del => {
       const searchLower = searchQuery.toLowerCase();
-      const delegatorName = getVendorName(del.delegatorId).toLowerCase();
-      const delegateeName = getVendorName(del.delegateeId).toLowerCase();
+      const delegatorName = getVendorNameStr(del.delegatorId).toLowerCase();
+      const delegateeName = getVendorNameStr(del.delegateeId).toLowerCase();
       
       // Check if search matches any permission label
       const permissionLabels = del.permissions.map(p => {

@@ -1,4 +1,4 @@
-import { X, AlertTriangle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 
 export default function StatusConfirmDialog({ isOpen, onClose, onConfirm, vendorName, currentStatus }) {
   if (!isOpen) return null;
