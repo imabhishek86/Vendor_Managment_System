@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Building2, Mail, Phone, Users, Car, Network, Shield, Clock } from 'lucide-react';
+import { ArrowLeft, Building2, Phone, Mail, Users, Shield, Clock, CheckCircle2, Network, Car } from 'lucide-react';
 import { useVendorContext } from '../context/VendorContext';
 import StatusBadge from '../components/common/StatusBadge';
 

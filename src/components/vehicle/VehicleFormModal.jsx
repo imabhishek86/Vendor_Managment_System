@@ -1,3 +1,4 @@
+import Ripple from '../common/Ripple';
 import { useState, useEffect } from 'react';
 import { X, AlertCircle } from 'lucide-react';
 import { useVendorContext } from '../../context/VendorContext';
@@ -125,17 +126,17 @@ export default function VehicleFormModal({ isOpen, onClose, onSubmit, initialDat
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 overflow-y-auto">
       <div 
-        className="bg-white rounded-xl shadow-xl w-full max-w-2xl flex flex-col my-8 animate-in fade-in zoom-in-95 duration-200"
+        className="bg-white rounded-xl shadow-xl w-full max-w-2xl flex flex-col my-8 animate-modal-enter"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
           <h2 className="text-xl font-bold text-slate-900">
             {isEdit ? 'Edit Vehicle' : 'Add New Vehicle'}
           </h2>
-          <button 
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-md hover:bg-slate-100"
+          <button onClick={onClose}
+            className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-md hover:bg-slate-100 relative overflow-hidden"
           >
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -314,17 +315,17 @@ export default function VehicleFormModal({ isOpen, onClose, onSubmit, initialDat
           </div>
 
           <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-3 mt-auto">
-            <button 
-              type="button"
+            <button type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors relative overflow-hidden"
             >
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
               Cancel
             </button>
-            <button 
-              type="submit"
-              className="px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-lg hover:bg-primary-700 transition-colors shadow-sm"
+            <button type="submit"
+              className="px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-lg hover:bg-primary-700 transition-colors shadow-sm relative overflow-hidden"
             >
+        <Ripple color="rgba(255, 255, 255, 0.3)" />
               {isEdit ? 'Save Changes' : 'Add Vehicle'}
             </button>
           </div>

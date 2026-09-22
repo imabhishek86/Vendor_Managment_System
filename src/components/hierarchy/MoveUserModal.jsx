@@ -1,3 +1,4 @@
+import Ripple from '../common/Ripple';
 import { useState, useEffect, useMemo } from 'react';
 import { X, AlertCircle, ArrowRightLeft } from 'lucide-react';
 import ManagerSelector from './ManagerSelector';
@@ -60,7 +61,7 @@ export default function MoveUserModal({ isOpen, onClose, vendorToMove, allVendor
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
       <div 
-        className="bg-white rounded-xl shadow-xl w-full max-w-lg flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+        className="bg-white rounded-xl shadow-xl w-full max-w-lg flex flex-col overflow-hidden animate-modal-enter"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
@@ -69,10 +70,10 @@ export default function MoveUserModal({ isOpen, onClose, vendorToMove, allVendor
             <ArrowRightLeft className="w-5 h-5 text-primary-500" />
             <h2 className="text-lg font-bold">Move User</h2>
           </div>
-          <button 
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-md hover:bg-slate-100"
+          <button onClick={onClose}
+            className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-md hover:bg-slate-100 relative overflow-hidden"
           >
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -117,16 +118,16 @@ export default function MoveUserModal({ isOpen, onClose, vendorToMove, allVendor
 
         {/* Footer */}
         <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-3">
-          <button 
-            onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+          <button onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors relative overflow-hidden"
           >
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
             Cancel
           </button>
-          <button 
-            onClick={handleMove}
-            className="px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-lg hover:bg-primary-700 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          <button onClick={handleMove}
+            className="px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-lg hover:bg-primary-700 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
           >
+        <Ripple color="rgba(255, 255, 255, 0.3)" />
             Move User
           </button>
         </div>

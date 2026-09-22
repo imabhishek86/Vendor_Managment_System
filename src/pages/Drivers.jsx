@@ -1,3 +1,4 @@
+import Ripple from '../components/common/Ripple';
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, CheckCircle2 } from 'lucide-react';
@@ -7,14 +8,25 @@ import { useVendorContext } from '../context/VendorContext';
 import DriverStatusBadge from '../components/driver/DriverStatusBadge';
 import DriverFormModal from '../components/driver/DriverFormModal';
 import StatusConfirmDialog from '../components/vendor/StatusConfirmDialog';
+import useDebounce from '../hooks/useDebounce';
+import { SkeletonTable } from '../components/common/Skeleton';
 
 export default function Drivers() {
   const { drivers, addDriver, editDriver, updateDriverStatus } = useDriverContext();
   const { vendors } = useVendorContext();
   const navigate = useNavigate();
 
+  // Loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Filters state
   const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [vendorFilter, setVendorFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [licenseFilter, setLicenseFilter] = useState('All');
@@ -40,11 +52,15 @@ export default function Drivers() {
   // Derived filtered data
   const filteredDrivers = useMemo(() => {
     return drivers.filter(driver => {
+      const searchLower = debouncedSearchQuery.toLowerCase();
+      const vendorName = vendors.find(v => v.id === driver.vendorId)?.name?.toLowerCase() || '';
+
       const matchesSearch = 
-        !searchQuery || 
-        driver.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        driver.phone?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        driver.email?.toLowerCase().includes(searchQuery.toLowerCase());
+        !debouncedSearchQuery || 
+        driver.name.toLowerCase().includes(searchLower) ||
+        driver.phone?.toLowerCase().includes(searchLower) ||
+        driver.email?.toLowerCase().includes(searchLower) ||
+        vendorName.includes(searchLower);
         
       const matchesVendor = vendorFilter === 'All' || driver.vendorId === vendorFilter;
       const matchesStatus = statusFilter === 'All' || driver.status === statusFilter;
@@ -53,7 +69,7 @@ export default function Drivers() {
       
       return matchesSearch && matchesVendor && matchesStatus && matchesLicense && matchesDoc;
     });
-  }, [drivers, searchQuery, vendorFilter, statusFilter, licenseFilter, documentFilter]);
+  }, [drivers, vendors, debouncedSearchQuery, vendorFilter, statusFilter, licenseFilter, documentFilter]);
 
   // Handlers
   const handleAddClick = () => {
@@ -148,7 +164,7 @@ export default function Drivers() {
     <div className="space-y-6 relative h-full flex flex-col">
       {/* Toast Notification */}
       {notification && (
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-md border border-green-200 flex items-center gap-2 animate-in fade-in slide-in-from-top-4">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-md border border-green-200 flex items-center gap-2 animate-popover-enter">
           <CheckCircle2 className="w-5 h-5" />
           <span className="font-medium text-sm">{notification}</span>
         </div>
@@ -159,10 +175,10 @@ export default function Drivers() {
           <h2 className="text-2xl font-bold text-slate-900">Driver Management</h2>
           <p className="mt-1 text-sm text-slate-500">View, search, filter, and manage all drivers across your vendor network.</p>
         </div>
-        <button 
-          onClick={handleAddClick}
-          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm whitespace-nowrap"
+        <button onClick={handleAddClick}
+          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm whitespace-nowrap relative overflow-hidden"
         >
+        <Ripple color="rgba(255, 255, 255, 0.3)" />
           <Plus className="w-4 h-4" />
           Add Driver
         </button>
@@ -232,7 +248,9 @@ export default function Drivers() {
 
       {/* Main Table */}
       <div className="flex-1 overflow-hidden flex flex-col">
-        {filteredDrivers.length === 0 ? (
+        {isLoading ? (
+          <SkeletonTable columns={8} rows={8} hasHeader={false} />
+        ) : filteredDrivers.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center flex-1 flex flex-col items-center justify-center">
             <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
               <Search className="w-8 h-8 text-slate-400" />

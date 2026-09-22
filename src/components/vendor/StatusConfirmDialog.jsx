@@ -1,3 +1,4 @@
+import Ripple from '../common/Ripple';
 import { AlertTriangle } from 'lucide-react';
 
 export default function StatusConfirmDialog({ isOpen, onClose, onConfirm, vendorName, currentStatus }) {
@@ -10,7 +11,7 @@ export default function StatusConfirmDialog({ isOpen, onClose, onConfirm, vendor
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
       <div 
-        className="bg-white rounded-xl shadow-xl w-full max-w-sm flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+        className="bg-white rounded-xl shadow-xl w-full max-w-sm flex flex-col overflow-hidden animate-modal-enter"
         onClick={e => e.stopPropagation()}
       >
         <div className="p-6 text-center flex flex-col items-center">
@@ -26,10 +27,10 @@ export default function StatusConfirmDialog({ isOpen, onClose, onConfirm, vendor
           </p>
           
           <div className="flex w-full gap-3">
-            <button 
-              onClick={onClose}
-              className="flex-1 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+            <button onClick={onClose}
+              className="flex-1 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors relative overflow-hidden"
             >
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
               Cancel
             </button>
             <button 

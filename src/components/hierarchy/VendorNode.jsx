@@ -1,3 +1,4 @@
+import Ripple from '../common/Ripple';
 import { useState } from 'react';
 import { ChevronRight, ChevronDown, Building2, Users, Car, CheckCircle2, Clock, AlertCircle, ArrowRightLeft } from 'lucide-react';
 
@@ -30,10 +31,10 @@ export default function VendorNode({ vendor, level = 0, onSelect, selectedId, on
       >
         <div className="flex items-center gap-2 w-8">
           {hasChildren ? (
-            <button 
-              onClick={toggleExpand}
-              className="p-1 rounded hover:bg-slate-200 text-slate-500 transition-colors"
+            <button onClick={toggleExpand}
+              className="p-1 rounded hover:bg-slate-200 text-slate-500 transition-colors relative overflow-hidden"
             >
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
               {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </button>
           ) : (

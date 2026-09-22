@@ -1,3 +1,4 @@
+import Ripple from '../components/common/Ripple';
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, CheckCircle2 } from 'lucide-react';
@@ -6,13 +7,24 @@ import StatusBadge from '../components/common/StatusBadge';
 import { useVendorContext } from '../context/VendorContext';
 import VendorFormModal from '../components/vendor/VendorFormModal';
 import StatusConfirmDialog from '../components/vendor/StatusConfirmDialog';
+import useDebounce from '../hooks/useDebounce';
+import { SkeletonTable } from '../components/common/Skeleton';
 
 export default function Vendors() {
   const { vendors, addVendor, editVendor, updateVendorStatus } = useVendorContext();
   const navigate = useNavigate();
   
+  // Loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+  
   // Filters state
   const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [typeFilter, setTypeFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
 
@@ -33,21 +45,22 @@ export default function Vendors() {
     }
   }, [notification]);
 
-  // Derived filtered data
+  // Derived  // Filtered Data
   const filteredVendors = useMemo(() => {
     return vendors.filter(vendor => {
+      const searchLower = debouncedSearchQuery.toLowerCase();
       const matchesSearch = 
-        !searchQuery || 
-        vendor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        vendor.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        vendor.phone?.toLowerCase().includes(searchQuery.toLowerCase());
-        
+        !debouncedSearchQuery ||
+        vendor.name.toLowerCase().includes(searchLower) ||
+        vendor.email.toLowerCase().includes(searchLower) ||
+        vendor.phone.includes(searchLower);
+
       const matchesType = typeFilter === 'All' || vendor.type === typeFilter;
       const matchesStatus = statusFilter === 'All' || vendor.status === statusFilter;
-      
+
       return matchesSearch && matchesType && matchesStatus;
     });
-  }, [vendors, searchQuery, typeFilter, statusFilter]);
+  }, [vendors, debouncedSearchQuery, typeFilter, statusFilter]);
 
   // Handlers
   const handleAddClick = () => {
@@ -140,7 +153,7 @@ export default function Vendors() {
     <div className="space-y-6 relative h-full flex flex-col">
       {/* Toast Notification */}
       {notification && (
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-md border border-green-200 flex items-center gap-2 animate-in fade-in slide-in-from-top-4">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-md border border-green-200 flex items-center gap-2 animate-popover-enter">
           <CheckCircle2 className="w-5 h-5" />
           <span className="font-medium text-sm">{notification}</span>
         </div>
@@ -151,10 +164,10 @@ export default function Vendors() {
           <h2 className="text-2xl font-bold text-slate-900">Vendor Management</h2>
           <p className="mt-1 text-sm text-slate-500">View, search, filter, and manage your entire vendor network.</p>
         </div>
-        <button 
-          onClick={handleAddClick}
-          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm"
+        <button onClick={handleAddClick}
+          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm relative overflow-hidden"
         >
+        <Ripple color="rgba(255, 255, 255, 0.3)" />
           <Plus className="w-4 h-4" />
           Add Vendor
         </button>
@@ -205,7 +218,9 @@ export default function Vendors() {
 
       {/* Main Table */}
       <div className="flex-1 overflow-hidden flex flex-col">
-        {filteredVendors.length === 0 ? (
+        {isLoading ? (
+          <SkeletonTable columns={8} rows={8} hasHeader={false} />
+        ) : filteredVendors.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center flex-1 flex flex-col items-center justify-center">
             <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
               <Search className="w-8 h-8 text-slate-400" />

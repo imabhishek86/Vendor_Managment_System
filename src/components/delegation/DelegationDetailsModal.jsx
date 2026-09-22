@@ -1,3 +1,4 @@
+import Ripple from '../common/Ripple';
 import { X, Shield } from 'lucide-react';
 import DelegationStatusBadge from './DelegationStatusBadge';
 import { ALL_PERMISSIONS } from './PermissionSelector';
@@ -14,7 +15,7 @@ export default function DelegationDetailsModal({ isOpen, onClose, delegation }) 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
       <div 
-        className="bg-white rounded-xl shadow-xl w-full max-w-lg flex flex-col my-8 animate-in fade-in zoom-in-95 duration-200"
+        className="bg-white rounded-xl shadow-xl w-full max-w-lg flex flex-col my-8 animate-modal-enter"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50 rounded-t-xl">
@@ -22,7 +23,8 @@ export default function DelegationDetailsModal({ isOpen, onClose, delegation }) 
             <Shield className="w-5 h-5 text-primary-500" />
             Delegation Details
           </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-1 rounded-md hover:bg-slate-200">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-1 rounded-md hover:bg-slate-200 relative overflow-hidden transition-all duration-200">
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
             <X className="w-5 h-5" />
           </button>
         </div>

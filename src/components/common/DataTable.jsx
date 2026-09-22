@@ -1,3 +1,4 @@
+import Ripple from './Ripple';
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function DataTable({ columns, data, keyField = 'id', title, description }) {
@@ -19,7 +20,8 @@ export default function DataTable({ columns, data, keyField = 'id', title, descr
               placeholder="Search..."
             />
           </div>
-          <button className="inline-flex items-center rounded-lg bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
+          <button className="inline-flex items-center rounded-lg bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 relative overflow-hidden transition-all duration-200">
+        <Ripple color="rgba(255, 255, 255, 0.3)" />
             Add New
           </button>
         </div>
@@ -76,14 +78,17 @@ export default function DataTable({ columns, data, keyField = 'id', title, descr
           </div>
           <div>
             <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-              <button className="relative inline-flex items-center rounded-l-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0">
+              <button className="relative inline-flex items-center rounded-l-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0 overflow-hidden transition-all duration-200">
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
                 <span className="sr-only">Previous</span>
                 <ChevronLeft className="h-5 w-5" aria-hidden="true" />
               </button>
-              <button className="relative z-10 inline-flex items-center bg-primary-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
+              <button className="relative z-10 inline-flex items-center bg-primary-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 overflow-hidden transition-all duration-200">
+        <Ripple color="rgba(255, 255, 255, 0.3)" />
                 1
               </button>
-              <button className="relative inline-flex items-center rounded-r-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0">
+              <button className="relative inline-flex items-center rounded-r-md px-2 py-2 text-slate-400 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 focus:z-20 focus:outline-offset-0 overflow-hidden transition-all duration-200">
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
                 <span className="sr-only">Next</span>
                 <ChevronRight className="h-5 w-5" aria-hidden="true" />
               </button>

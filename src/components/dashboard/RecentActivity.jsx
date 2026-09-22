@@ -32,10 +32,9 @@ export default function RecentActivity({ activities }) {
       
       <div className="flex-1 overflow-y-auto pr-2">
         <ul className="relative border-l-2 border-slate-100 ml-3 space-y-6">
-          {activities.map((activity, index) => {
+          {activities.map((activity) => {
             const Icon = iconMap[activity.icon] || Activity;
             const colorClass = statusColorMap[activity.status] || statusColorMap.info;
-            const ringClass = ringColorMap[activity.status] || ringColorMap.info;
             
             return (
               <li key={activity.id} className="relative pl-6">

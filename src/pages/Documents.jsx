@@ -10,11 +10,13 @@ import DocumentStatusBadge from '../components/documents/DocumentStatusBadge';
 import DocumentUploadModal from '../components/documents/DocumentUploadModal';
 import DocumentDetailsModal from '../components/documents/DocumentDetailsModal';
 import DocumentRejectModal from '../components/documents/DocumentRejectModal';
+import useDebounce from '../hooks/useDebounce';
+import { SkeletonTable, SkeletonCard } from '../components/common/Skeleton';
 
 // Reusable stat card
 const StatCard = ({ title, value, icon, colorClass }) => (
-  <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center gap-4">
-    <div className={`p-3 rounded-lg ${colorClass}`}>
+  <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center gap-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+    <div className={`p-3 rounded-lg ${colorClass} transition-transform duration-200 hover:scale-110`}>
       {icon}
     </div>
     <div>
@@ -25,6 +27,13 @@ const StatCard = ({ title, value, icon, colorClass }) => (
 );
 
 export default function Documents() {
+  // Loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
   const { 
     documents, 
     addDocument, 
@@ -171,7 +180,7 @@ export default function Documents() {
   return (
     <div className="space-y-6 relative h-full flex flex-col">
       {notification && (
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-md border border-green-200 flex items-center gap-2 animate-in fade-in slide-in-from-top-4">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-md border border-green-200 flex items-center gap-2 animate-popover-enter">
           <CheckCircle2 className="w-5 h-5" />
           <span className="font-medium text-sm">{notification}</span>
         </div>
@@ -193,16 +202,22 @@ export default function Documents() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <StatCard title="Total" value={summary.Total} icon={<FileText />} colorClass="bg-slate-100 text-slate-600" />
-        <StatCard title="Verified" value={summary.Verified} icon={<CheckCircle2 />} colorClass="bg-green-100 text-green-600" />
-        <StatCard title="Pending" value={summary.Pending} icon={<Clock />} colorClass="bg-blue-100 text-blue-600" />
-        <StatCard title="Expiring Soon" value={summary['Expiring Soon']} icon={<AlertCircle />} colorClass="bg-amber-100 text-amber-600" />
-        <StatCard title="Expired" value={summary.Expired} icon={<ShieldAlert />} colorClass="bg-red-100 text-red-600" />
-        <StatCard title="Rejected" value={summary.Rejected} icon={<XCircle />} colorClass="bg-rose-100 text-rose-600" />
+        {isLoading ? (
+          Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
+        ) : (
+          <>
+            <StatCard title="Total" value={summary.Total} icon={<FileText />} colorClass="bg-slate-100 text-slate-600" />
+            <StatCard title="Verified" value={summary.Verified} icon={<CheckCircle2 />} colorClass="bg-green-100 text-green-600" />
+            <StatCard title="Pending" value={summary.Pending} icon={<Clock />} colorClass="bg-blue-100 text-blue-600" />
+            <StatCard title="Expiring Soon" value={summary['Expiring Soon']} icon={<AlertCircle />} colorClass="bg-amber-100 text-amber-600" />
+            <StatCard title="Expired" value={summary.Expired} icon={<ShieldAlert />} colorClass="bg-red-100 text-red-600" />
+            <StatCard title="Rejected" value={summary.Rejected} icon={<XCircle />} colorClass="bg-rose-100 text-rose-600" />
+          </>
+        )}
       </div>
 
       {/* Compliance Alerts - Only show if there are actionable items */}
-      {alerts.length > 0 && (
+      {!isLoading && alerts.length > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-5 shadow-sm">
           <h3 className="text-red-800 font-bold flex items-center gap-2 mb-4">
             <ShieldAlert className="w-5 h-5" />
@@ -301,7 +316,9 @@ export default function Documents() {
 
       {/* Main Table */}
       <div className="flex-1 overflow-hidden flex flex-col">
-        {filteredDocs.length === 0 ? (
+        {isLoading ? (
+          <SkeletonTable columns={6} rows={8} hasHeader={false} />
+        ) : filteredDocs.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center flex-1 flex flex-col items-center justify-center">
             <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
               <Search className="w-8 h-8 text-slate-400" />

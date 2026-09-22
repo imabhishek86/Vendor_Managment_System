@@ -24,10 +24,10 @@ export default function StatCard({ label, value, trend, iconName, color }) {
   const isPositive = trend.startsWith('+');
 
   return (
-    <div className="bg-white overflow-hidden shadow-sm rounded-xl border border-slate-200 p-5 transition-all hover:shadow-md flex flex-col justify-between">
-      <div className="flex items-center justify-between">
-        <div className={`flex-shrink-0 p-2.5 rounded-lg ${colors.bg}`}>
-          <Icon className={`w-5 h-5 ${colors.text}`} aria-hidden="true" />
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col transition-all duration-200 hover:-translate-y-1 hover:shadow-md group">
+      <div className="flex items-start justify-between mb-4">
+        <div className={`p-3 rounded-lg ${colors.bg} ${colors.text} transition-transform duration-200 group-hover:scale-110`}>
+          <Icon className="w-6 h-6" />
         </div>
         <div className={`text-xs font-semibold px-2 py-1 rounded-full ${isPositive ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
           {trend}

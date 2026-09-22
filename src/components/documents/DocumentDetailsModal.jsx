@@ -1,3 +1,4 @@
+import Ripple from '../common/Ripple';
 import { X, FileText, CheckCircle2, XCircle } from 'lucide-react';
 import DocumentStatusBadge from './DocumentStatusBadge';
 import { useDocumentContext } from '../../context/DocumentContext';
@@ -13,7 +14,7 @@ export default function DocumentDetailsModal({ isOpen, onClose, document, onVeri
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
       <div 
-        className="bg-white rounded-xl shadow-xl w-full max-w-lg flex flex-col my-8 animate-in fade-in zoom-in-95 duration-200"
+        className="bg-white rounded-xl shadow-xl w-full max-w-lg flex flex-col my-8 animate-modal-enter"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50 rounded-t-xl">
@@ -21,7 +22,8 @@ export default function DocumentDetailsModal({ isOpen, onClose, document, onVeri
             <FileText className="w-5 h-5 text-primary-500" />
             Document Details
           </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-1 rounded-md hover:bg-slate-200">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 p-1 rounded-md hover:bg-slate-200 relative overflow-hidden transition-all duration-200">
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -83,16 +85,16 @@ export default function DocumentDetailsModal({ isOpen, onClose, document, onVeri
 
         {isPending && (
           <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-3 rounded-b-xl">
-            <button 
-              onClick={onReject}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-700 bg-white border border-red-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-colors"
+            <button onClick={onReject}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-700 bg-white border border-red-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-colors relative overflow-hidden"
             >
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
               <XCircle className="w-4 h-4" /> Reject
             </button>
-            <button 
-              onClick={onVerify}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-lg hover:bg-green-700 transition-colors shadow-sm"
+            <button onClick={onVerify}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-lg hover:bg-green-700 transition-colors shadow-sm relative overflow-hidden"
             >
+        <Ripple color="rgba(255, 255, 255, 0.3)" />
               <CheckCircle2 className="w-4 h-4" /> Verify Document
             </button>
           </div>

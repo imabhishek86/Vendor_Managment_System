@@ -5,11 +5,22 @@ import MoveUserModal from '../components/hierarchy/MoveUserModal';
 import { buildVendorTree } from '../utils/hierarchy';
 import { useVendorContext } from '../context/VendorContext';
 import { CheckCircle2 } from 'lucide-react';
+import useDebounce from '../hooks/useDebounce';
+import { SkeletonTree, SkeletonCard } from '../components/common/Skeleton';
 
 export default function Hierarchy() {
   const { vendors, moveVendor } = useVendorContext();
   const [selectedVendor, setSelectedVendor] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
+  
+  // Loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
   
   // Move user modal state
   const [isMoveModalOpen, setIsMoveModalOpen] = useState(false);
@@ -27,11 +38,11 @@ export default function Hierarchy() {
 
   // Filter vendors based on search query, then build tree
   const filteredAndBuiltTree = useMemo(() => {
-    if (!searchQuery) {
+    if (!debouncedSearchQuery) {
       return buildVendorTree(vendors);
     }
     
-    const lowerQuery = searchQuery.toLowerCase();
+    const lowerQuery = debouncedSearchQuery.toLowerCase();
     const vendorMap = new Map();
     vendors.forEach(v => vendorMap.set(v.id, v));
     
@@ -51,7 +62,7 @@ export default function Hierarchy() {
     
     const filtered = vendors.filter(v => keepIds.has(v.id));
     return buildVendorTree(filtered);
-  }, [searchQuery, vendors]);
+  }, [debouncedSearchQuery, vendors]);
 
   const handleSelectVendor = (vendor) => {
     setSelectedVendor(vendor);
@@ -78,7 +89,7 @@ export default function Hierarchy() {
     <div className="h-[calc(100vh-10rem)] flex flex-col relative">
       {/* Toast Notification */}
       {notification && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-md border border-green-200 flex items-center gap-2 animate-in fade-in slide-in-from-top-4">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-md border border-green-200 flex items-center gap-2 animate-popover-enter">
           <CheckCircle2 className="w-5 h-5" />
           <span className="font-medium text-sm">{notification}</span>
         </div>
@@ -91,14 +102,24 @@ export default function Hierarchy() {
       
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-hidden">
         <div className="lg:col-span-2 h-full">
-          <VendorTree 
-            vendors={filteredAndBuiltTree} 
-            onSelect={handleSelectVendor}
-            selectedId={selectedVendor?.id}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            onMoveUser={handleMoveUserClick}
-          />
+          {isLoading ? (
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 h-full p-6">
+              <div className="mb-6 flex justify-between">
+                <SkeletonCard className="h-6 w-48 border-none p-0 shadow-none" />
+                <SkeletonCard className="h-10 w-64 border-none p-0 shadow-none rounded-lg" />
+              </div>
+              <SkeletonTree depth={4} />
+            </div>
+          ) : (
+            <VendorTree 
+              vendors={filteredAndBuiltTree} 
+              onSelect={handleSelectVendor}
+              selectedId={selectedVendor?.id}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              onMoveUser={handleMoveUserClick}
+            />
+          )}
         </div>
         <div className="h-full hidden lg:block">
           <VendorDetailsPanel vendor={selectedVendor} />
@@ -108,7 +129,7 @@ export default function Hierarchy() {
       {/* Mobile Details Panel Overlay */}
       {selectedVendor && (
         <div className="lg:hidden fixed inset-0 z-40 flex items-end sm:items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-t-xl sm:rounded-xl shadow-xl w-full max-h-[85vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom-8">
+          <div className="bg-white rounded-t-xl sm:rounded-xl shadow-xl w-full max-h-[85vh] flex flex-col overflow-hidden animate-modal-enter">
             <div className="flex justify-end p-2 border-b border-slate-100">
               <button 
                 onClick={() => setSelectedVendor(null)}

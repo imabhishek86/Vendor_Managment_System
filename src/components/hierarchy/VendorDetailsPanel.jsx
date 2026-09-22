@@ -1,3 +1,4 @@
+import Ripple from '../common/Ripple';
 import { Building2, Mail, Phone, Calendar, Users, Car } from 'lucide-react';
 
 export default function VendorDetailsPanel({ vendor }) {
@@ -84,13 +85,16 @@ export default function VendorDetailsPanel({ vendor }) {
 
         <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Quick Actions</h3>
         <div className="space-y-2">
-          <button className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors">
+          <button className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors relative overflow-hidden">
+        <Ripple color="rgba(255, 255, 255, 0.3)" />
             Manage Documents
           </button>
-          <button className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-sm font-medium transition-colors">
+          <button className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-sm font-medium transition-colors relative overflow-hidden">
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
             Add Sub-Vendor
           </button>
-          <button className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-white border border-slate-200 hover:bg-red-50 text-red-600 hover:border-red-200 rounded-lg text-sm font-medium transition-colors">
+          <button className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-white border border-slate-200 hover:bg-red-50 text-red-600 hover:border-red-200 rounded-lg text-sm font-medium transition-colors relative overflow-hidden">
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
             Suspend Vendor
           </button>
         </div>

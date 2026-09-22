@@ -1,3 +1,4 @@
+import Ripple from '../components/common/Ripple';
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, CheckCircle2 } from 'lucide-react';
@@ -10,6 +11,8 @@ import { getExpiryStatus } from '../utils/dateStatus';
 import VehicleFormModal from '../components/vehicle/VehicleFormModal';
 import ComplianceStatusBadge from '../components/vehicle/ComplianceStatusBadge';
 import StatusConfirmDialog from '../components/vendor/StatusConfirmDialog';
+import useDebounce from '../hooks/useDebounce';
+import { SkeletonTable } from '../components/common/Skeleton';
 
 export default function Vehicles() {
   const { vehicles, addVehicle, editVehicle, updateVehicleStatus } = useVehicleContext();
@@ -17,8 +20,17 @@ export default function Vehicles() {
   const { drivers } = useDriverContext();
   const navigate = useNavigate();
 
+  // Loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Filters state
   const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [typeFilter, setTypeFilter] = useState('All');
   const [vendorFilter, setVendorFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -48,10 +60,10 @@ export default function Vehicles() {
       const vendorName = vendors.find(v => v.id === vehicle.vendorId)?.name || '';
       const driverName = drivers.find(d => d.id === vehicle.driverId)?.name || '';
       
-      const searchLower = searchQuery.toLowerCase();
+      const searchLower = debouncedSearchQuery.toLowerCase();
       
       const matchesSearch = 
-        !searchQuery || 
+        !debouncedSearchQuery || 
         vehicle.licensePlate.toLowerCase().includes(searchLower) ||
         vehicle.registrationNumber?.toLowerCase().includes(searchLower) ||
         vendorName.toLowerCase().includes(searchLower) ||
@@ -66,7 +78,7 @@ export default function Vehicles() {
       
       return matchesSearch && matchesType && matchesVendor && matchesStatus && matchesInsurance;
     });
-  }, [vehicles, vendors, drivers, searchQuery, typeFilter, vendorFilter, statusFilter, insuranceFilter]);
+  }, [vehicles, vendors, drivers, debouncedSearchQuery, typeFilter, vendorFilter, statusFilter, insuranceFilter]);
 
   // Handlers
   const handleAddClick = () => {
@@ -158,7 +170,7 @@ export default function Vehicles() {
     <div className="space-y-6 relative h-full flex flex-col">
       {/* Toast Notification */}
       {notification && (
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-md border border-green-200 flex items-center gap-2 animate-in fade-in slide-in-from-top-4">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-50 bg-green-50 text-green-700 px-4 py-3 rounded-lg shadow-md border border-green-200 flex items-center gap-2 animate-popover-enter">
           <CheckCircle2 className="w-5 h-5" />
           <span className="font-medium text-sm">{notification}</span>
         </div>
@@ -169,10 +181,10 @@ export default function Vehicles() {
           <h2 className="text-2xl font-bold text-slate-900">Vehicle Management</h2>
           <p className="mt-1 text-sm text-slate-500">View, search, filter, and manage fleet vehicles and compliance.</p>
         </div>
-        <button 
-          onClick={handleAddClick}
-          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm whitespace-nowrap"
+        <button onClick={handleAddClick}
+          className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm whitespace-nowrap relative overflow-hidden"
         >
+        <Ripple color="rgba(255, 255, 255, 0.3)" />
           <Plus className="w-4 h-4" />
           Add Vehicle
         </button>
@@ -244,19 +256,21 @@ export default function Vehicles() {
 
       {/* Main Table */}
       <div className="flex-1 overflow-hidden flex flex-col">
-        {filteredVehicles.length === 0 ? (
+        {isLoading ? (
+          <SkeletonTable columns={8} rows={8} hasHeader={false} />
+        ) : filteredVehicles.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center flex-1 flex flex-col items-center justify-center">
             <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
               <Search className="w-8 h-8 text-slate-400" />
             </div>
-            <h3 className="text-lg font-medium text-slate-900 mb-1">No vehicles match your search.</h3>
+            <h3 className="text-lg font-medium text-slate-900 mb-1">No vehicles found</h3>
             <p className="text-sm text-slate-500">Try adjusting your search or filter criteria.</p>
           </div>
         ) : (
           <DataTable 
             columns={columns} 
             data={filteredVehicles} 
-            title="Fleet Vehicles" 
+            title="Registered Vehicles" 
             description={`Showing ${filteredVehicles.length} matching vehicles.`}
           />
         )}

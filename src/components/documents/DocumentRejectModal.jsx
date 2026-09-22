@@ -1,3 +1,4 @@
+import Ripple from '../common/Ripple';
 import { X } from 'lucide-react';
 
 export default function DocumentRejectModal({ isOpen, onClose, onConfirm }) {
@@ -10,15 +11,16 @@ export default function DocumentRejectModal({ isOpen, onClose, onConfirm }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 transition-opacity">
       <div 
-        className="bg-white rounded-xl shadow-xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200"
+        className="bg-white rounded-xl shadow-xl w-full max-w-sm overflow-hidden animate-modal-enter"
         onClick={e => e.stopPropagation()}
       >
         <div className="p-5">
           <div className="flex justify-between items-start mb-4">
             <h3 className="text-lg font-bold text-slate-900">Reject Document</h3>
-            <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+            <button onClick={onClose} className="text-slate-400 hover:text-slate-600 relative overflow-hidden transition-all duration-200">
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -42,17 +44,17 @@ export default function DocumentRejectModal({ isOpen, onClose, onConfirm }) {
             </div>
             
             <div className="flex justify-end gap-3 pt-2">
-              <button 
-                type="button" 
+              <button type="button" 
                 onClick={onClose}
-                className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50"
+                className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 relative overflow-hidden transition-all duration-200"
               >
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
                 Cancel
               </button>
-              <button 
-                type="submit"
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-lg hover:bg-red-700"
+              <button type="submit"
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-lg hover:bg-red-700 relative overflow-hidden transition-all duration-200"
               >
+        <Ripple color="rgba(255, 255, 255, 0.3)" />
                 Confirm Rejection
               </button>
             </div>

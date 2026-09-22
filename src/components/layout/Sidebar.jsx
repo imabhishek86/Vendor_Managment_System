@@ -1,16 +1,17 @@
-import { useState } from 'react';
+import Ripple from '../common/Ripple';
 import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Network, 
+  Building2, 
   Users, 
   User, 
   Car, 
   FileText, 
   UserPlus, 
+  Shield, 
   BarChart3, 
   Settings,
-  Menu,
   X
 } from 'lucide-react';
 
@@ -48,7 +49,8 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
             <Car className="w-6 h-6" />
             <span className="text-xl font-bold text-slate-900">FleetHub</span>
           </div>
-          <button onClick={toggleSidebar} className="lg:hidden text-slate-500 hover:text-slate-700">
+          <button onClick={toggleSidebar} className="lg:hidden text-slate-500 hover:text-slate-700 relative overflow-hidden transition-all duration-200">
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
             <X className="w-5 h-5" />
           </button>
         </div>

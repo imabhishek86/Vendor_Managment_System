@@ -1,3 +1,4 @@
+import Ripple from '../components/common/Ripple';
 import { User, Bell, Lock, Globe } from 'lucide-react';
 
 export default function Settings() {
@@ -42,7 +43,8 @@ export default function Settings() {
                   AD
                 </div>
                 <div>
-                  <button type="button" className="px-4 py-2 bg-white border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50">
+                  <button type="button" className="px-4 py-2 bg-white border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 relative overflow-hidden transition-all duration-200">
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
                     Change Avatar
                   </button>
                   <p className="mt-2 text-xs text-slate-500">JPG, GIF or PNG. Max size 2MB.</p>
@@ -91,10 +93,12 @@ export default function Settings() {
               </div>
 
               <div className="mt-8 flex justify-end gap-3 pt-6 border-t border-slate-200">
-                <button type="button" className="px-4 py-2 bg-white border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50">
+                <button type="button" className="px-4 py-2 bg-white border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 relative overflow-hidden transition-all duration-200">
+        <Ripple color="rgba(0, 0, 0, 0.1)" />
                   Cancel
                 </button>
-                <button type="button" className="px-4 py-2 bg-primary-600 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-primary-700">
+                <button type="button" className="px-4 py-2 bg-primary-600 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white hover:bg-primary-700 relative overflow-hidden transition-all duration-200">
+        <Ripple color="rgba(255, 255, 255, 0.3)" />
                   Save Changes
                 </button>
               </div>
