@@ -109,7 +109,7 @@ src/
 To run this project locally:
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/imabhishek86/Vendor_Managment_System
 cd <project-folder>
 npm install
 npm run dev
@@ -174,4 +174,4 @@ Potential improvements for a production release:
 
 ## Author
 
-Aditya Kumar Sahu
+Abhishek Prasad
