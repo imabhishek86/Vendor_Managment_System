@@ -8,6 +8,13 @@ import { useDriverContext } from '../../context/DriverContext';
 import { useVehicleContext } from '../../context/VehicleContext';
 import { useDocumentContext } from '../../context/DocumentContext';
 
+const MOCK_NOTIFICATIONS = [
+  { id: 1, title: 'New driver added', time: '5m ago', icon: Users, unread: true },
+  { id: 2, title: 'Document pending verification', time: '1h ago', icon: FileText, unread: true },
+  { id: 3, title: 'Vehicle compliance issue', time: '2h ago', icon: Car, unread: false },
+  { id: 4, title: 'Vendor hierarchy updated', time: '1d ago', icon: Building2, unread: false },
+];
+
 export default function Header({ toggleSidebar }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,6 +31,11 @@ export default function Header({ toggleSidebar }) {
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
+  // Notification state
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
+  const notificationRef = useRef(null);
+  
   // Create page title from path
   const path = location.pathname.substring(1) || 'dashboard';
   const pageTitle = path.charAt(0).toUpperCase() + path.slice(1);
@@ -34,11 +46,15 @@ export default function Header({ toggleSidebar }) {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setIsNotificationOpen(false);
+      }
     };
     
     const handleEscape = (event) => {
       if (event.key === 'Escape') {
         setIsDropdownOpen(false);
+        setIsNotificationOpen(false);
       }
     };
 
@@ -189,12 +205,66 @@ export default function Header({ toggleSidebar }) {
             </div>
           )}
         </div>
-        
-        <button onClick={() => navigate('/settings')} className="p-2 text-slate-500 hover:text-slate-700 rounded-lg hover:bg-slate-100 relative overflow-hidden transition-all duration-200">
-        <Ripple color="rgba(0, 0, 0, 0.1)" />
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-        </button>
+        <div className="relative" ref={notificationRef}>
+          <button 
+            onClick={() => setIsNotificationOpen(!isNotificationOpen)} 
+            className="p-2 text-slate-500 hover:text-slate-700 rounded-lg hover:bg-slate-100 relative overflow-hidden transition-all duration-200"
+            aria-label="Notifications"
+            aria-expanded={isNotificationOpen}
+          >
+            <Ripple color="rgba(0, 0, 0, 0.1)" />
+            <Bell className="w-5 h-5" />
+            {notifications.some(n => n.unread) && (
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+            )}
+          </button>
+
+          {isNotificationOpen && (
+            <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden z-50">
+              <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 className="font-semibold text-slate-900">Notifications</h3>
+                {notifications.some(n => n.unread) && (
+                  <button 
+                    onClick={() => setNotifications(notifications.map(n => ({ ...n, unread: false })))}
+                    className="text-xs text-indigo-600 hover:text-indigo-700 font-medium"
+                  >
+                    Mark all as read
+                  </button>
+                )}
+              </div>
+              <div className="max-h-[320px] overflow-y-auto">
+                {notifications.map(notification => {
+                  const Icon = notification.icon;
+                  return (
+                    <div 
+                      key={notification.id} 
+                      onClick={() => setNotifications(notifications.map(n => n.id === notification.id ? { ...n, unread: false } : n))}
+                      className={`p-4 border-b border-slate-50 hover:bg-slate-50 flex gap-3 cursor-pointer transition-colors ${notification.unread ? 'bg-indigo-50/30' : ''}`}
+                    >
+                      <div className={`p-2 rounded-lg shrink-0 ${notification.unread ? 'bg-indigo-100 text-indigo-600' : 'bg-slate-100 text-slate-500'}`}>
+                        <Icon className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm ${notification.unread ? 'font-semibold text-slate-900' : 'text-slate-700'}`}>
+                          {notification.title}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-1">{notification.time}</p>
+                      </div>
+                      {notification.unread && (
+                        <div className="w-2 h-2 bg-indigo-600 rounded-full mt-1.5 shrink-0"></div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="p-3 border-t border-slate-100 text-center bg-slate-50">
+                <button className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">
+                  View all notifications
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
