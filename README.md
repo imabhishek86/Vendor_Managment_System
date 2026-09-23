@@ -128,28 +128,28 @@ This project is deployed on Netlify. It includes Single Page Application (SPA) r
 ## Screenshots
 
 ### Dashboard
-![Dashboard](./screenshots/dashboard.png)
+![Dashboard](./Screenshots/dashboard.png)
 
 ### Vendor Management
-![Vendor Management](./screenshots/vendors.png)
+![Vendor Management](./Screenshots/vendors.png)
 
 ### Driver Management
-![Driver Management](./screenshots/drivers.png)
+![Driver Management](./Screenshots/drivers.png)
 
 ### Vehicle Management
-![Vehicle Management](./screenshots/vehicles.png)
+![Vehicle Management](./Screenshots/vehicles.png)
 
 ### Vendor Hierarchy
-![Vendor Hierarchy](./screenshots/hierarchy.png)
+![Vendor Hierarchy](./Screenshots/hierarchy.png)
 
 ### Documents & Compliance
-![Documents & Compliance](./screenshots/documents.png)
+![Documents & Compliance](./Screenshots/documents.png)
 
 ### Delegation & Permissions
-![Delegation & Permissions](./screenshots/delegation.png)
+![Delegation & Permissions](./Screenshots/delegation.png)
 
 ### Reports
-![Reports](./screenshots/reports.png)
+![Reports](./Screenshots/reports.png)
 
 ## Limitations
 
