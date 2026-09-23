@@ -10,6 +10,7 @@ import FleetStatus from '../components/dashboard/FleetStatus';
 import ComplianceCard from '../components/dashboard/ComplianceCard';
 import RecentActivity from '../components/dashboard/RecentActivity';
 import QuickActions from '../components/dashboard/QuickActions';
+import VendorHierarchyOverview from '../components/dashboard/VendorHierarchyOverview';
 import { SkeletonCard, Skeleton } from '../components/common/Skeleton';
 
 export default function Dashboard() {
@@ -94,6 +95,13 @@ export default function Dashboard() {
           ))
         }
       </div>
+
+      {/* Hierarchy Overview Section */}
+      {isLoading ? (
+        <Skeleton className="h-48 w-full rounded-xl mt-6" />
+      ) : (
+        <VendorHierarchyOverview />
+      )}
 
       {/* Main Grid Layout for widgets */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
