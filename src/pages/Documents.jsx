@@ -325,7 +325,30 @@ export default function Documents() {
               <Search className="w-8 h-8 text-slate-400" />
             </div>
             <h3 className="text-lg font-medium text-slate-900 mb-1">No documents found.</h3>
-            <p className="text-sm text-slate-500">Try adjusting your search or filter criteria.</p>
+            <p className="text-sm text-slate-500">
+              {documents.length === 0 ? "You haven't uploaded any documents yet." : "Try adjusting your search or filter criteria."}
+            </p>
+            {(searchQuery || entityFilter !== 'All' || typeFilter !== 'All' || statusFilter !== 'All' || vendorFilter !== 'All') ? (
+              <button 
+                onClick={() => {
+                  setSearchQuery('');
+                  setEntityFilter('All');
+                  setTypeFilter('All');
+                  setStatusFilter('All');
+                  setVendorFilter('All');
+                }}
+                className="mt-4 px-4 py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
+              >
+                Clear all filters
+              </button>
+            ) : documents.length === 0 ? (
+              <button 
+                onClick={() => setIsUploadOpen(true)}
+                className="mt-4 px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2 mx-auto"
+              >
+                <UploadCloud className="w-4 h-4" /> Upload your first document
+              </button>
+            ) : null}
           </div>
         ) : (
           <DataTable 

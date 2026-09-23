@@ -1,7 +1,7 @@
 import Ripple from '../common/Ripple';
 import { X, Shield } from 'lucide-react';
 import DelegationStatusBadge from './DelegationStatusBadge';
-import { ALL_PERMISSIONS } from './PermissionSelector';
+import { ALL_PERMISSIONS } from '../../constants/permissions';
 import { useVendorContext } from '../../context/VendorContext';
 
 export default function DelegationDetailsModal({ isOpen, onClose, delegation }) {

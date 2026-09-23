@@ -12,6 +12,7 @@ import Documents from './pages/Documents';
 import Delegation from './pages/Delegation';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import NotFound from './pages/NotFound';
 import { VendorProvider } from './context/VendorContext';
 import { DriverProvider } from './context/DriverContext';
 import { VehicleProvider } from './context/VehicleContext';
@@ -41,6 +42,7 @@ function App() {
           <Route path="delegation" element={<Delegation />} />
           <Route path="reports" element={<Reports />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </Router>

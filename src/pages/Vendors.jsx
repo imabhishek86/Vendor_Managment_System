@@ -245,7 +245,28 @@ export default function Vendors() {
               <Search className="w-8 h-8 text-slate-400" />
             </div>
             <h3 className="text-lg font-medium text-slate-900 mb-1">No vendors found</h3>
-            <p className="text-sm text-slate-500">Try adjusting your search or filter criteria.</p>
+            <p className="text-sm text-slate-500">
+              {vendors.length === 0 ? "You haven't added any vendors yet." : "Try adjusting your search or filter criteria."}
+            </p>
+            {(searchQuery || typeFilter !== 'All' || statusFilter !== 'All') ? (
+              <button 
+                onClick={() => {
+                  setSearchQuery('');
+                  setTypeFilter('All');
+                  setStatusFilter('All');
+                }}
+                className="mt-4 px-4 py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
+              >
+                Clear all filters
+              </button>
+            ) : vendors.length === 0 ? (
+              <button 
+                onClick={handleAddClick}
+                className="mt-4 px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2 mx-auto"
+              >
+                <Plus className="w-4 h-4" /> Add your first vendor
+              </button>
+            ) : null}
           </div>
         ) : (
           <div className="flex flex-col flex-1 h-full">

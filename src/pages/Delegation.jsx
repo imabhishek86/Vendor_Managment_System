@@ -9,7 +9,7 @@ import DelegationStatusBadge from '../components/delegation/DelegationStatusBadg
 import DelegationFormModal from '../components/delegation/DelegationFormModal';
 import DelegationDetailsModal from '../components/delegation/DelegationDetailsModal';
 import StatusConfirmDialog from '../components/vendor/StatusConfirmDialog';
-import { ALL_PERMISSIONS } from '../components/delegation/PermissionSelector';
+import { ALL_PERMISSIONS } from '../constants/permissions';
 import useDebounce from '../hooks/useDebounce';
 import { SkeletonTable, SkeletonCard } from '../components/common/Skeleton';
 
@@ -277,7 +277,28 @@ export default function Delegation() {
               <Search className="w-8 h-8 text-slate-400" />
             </div>
             <h3 className="text-lg font-medium text-slate-900 mb-1">No delegations found.</h3>
-            <p className="text-sm text-slate-500">Try adjusting your search or filter criteria.</p>
+            <p className="text-sm text-slate-500">
+              {delegations.length === 0 ? "You haven't created any delegations yet." : "Try adjusting your search or filter criteria."}
+            </p>
+            {(searchQuery || statusFilter !== 'All' || permissionFilter !== 'All') ? (
+              <button 
+                onClick={() => {
+                  setSearchQuery('');
+                  setStatusFilter('All');
+                  setPermissionFilter('All');
+                }}
+                className="mt-4 px-4 py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors"
+              >
+                Clear all filters
+              </button>
+            ) : delegations.length === 0 ? (
+              <button 
+                onClick={handleAddClick}
+                className="mt-4 px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2 mx-auto"
+              >
+                <Plus className="w-4 h-4" /> Create your first delegation
+              </button>
+            ) : null}
           </div>
         ) : (
           <DataTable 
