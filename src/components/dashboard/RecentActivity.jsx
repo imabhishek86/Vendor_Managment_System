@@ -15,12 +15,6 @@ const statusColorMap = {
   error: 'bg-red-100 text-red-600'
 };
 
-const ringColorMap = {
-  success: 'ring-green-100',
-  info: 'ring-blue-100',
-  warning: 'ring-amber-100',
-  error: 'ring-red-100'
-};
 
 export default function RecentActivity({ activities }) {
   return (

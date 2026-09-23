@@ -50,6 +50,7 @@ export default function Documents() {
 
   // Filters state
   const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [entityFilter, setEntityFilter] = useState('All');
   const [typeFilter, setTypeFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -94,12 +95,12 @@ export default function Documents() {
     };
 
     return documents.filter(doc => {
-      const searchLower = searchQuery.toLowerCase();
+      const searchLower = debouncedSearchQuery.toLowerCase();
       const entityName = getEntityNameStr(doc).toLowerCase();
       const vendorName = vendors.find(v => v.id === doc.vendorId)?.name?.toLowerCase() || '';
 
       const matchesSearch = 
-        !searchQuery ||
+        !debouncedSearchQuery ||
         doc.documentNumber.toLowerCase().includes(searchLower) ||
         doc.fileName.toLowerCase().includes(searchLower) ||
         entityName.includes(searchLower) ||
@@ -114,7 +115,7 @@ export default function Documents() {
 
       return matchesSearch && matchesEntity && matchesType && matchesVendor && matchesStatus;
     });
-  }, [documents, searchQuery, entityFilter, typeFilter, vendorFilter, statusFilter, getResolvedStatus, vendors, drivers, vehicles]);
+  }, [documents, debouncedSearchQuery, entityFilter, typeFilter, vendorFilter, statusFilter, getResolvedStatus, vendors, drivers, vehicles]);
 
   // Handlers
   const handleUploadSubmit = (data) => {

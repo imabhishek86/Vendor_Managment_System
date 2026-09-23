@@ -1,6 +1,6 @@
 import Ripple from '../common/Ripple';
-import { useState, useRef, useEffect } from 'react';
-import { X, UploadCloud, FileText, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { X, UploadCloud, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { useDriverContext } from '../../context/DriverContext';
 import { useVehicleContext } from '../../context/VehicleContext';
 

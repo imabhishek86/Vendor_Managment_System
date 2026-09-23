@@ -10,6 +10,7 @@ import DelegationFormModal from '../components/delegation/DelegationFormModal';
 import DelegationDetailsModal from '../components/delegation/DelegationDetailsModal';
 import StatusConfirmDialog from '../components/vendor/StatusConfirmDialog';
 import { ALL_PERMISSIONS } from '../components/delegation/PermissionSelector';
+import useDebounce from '../hooks/useDebounce';
 import { SkeletonTable, SkeletonCard } from '../components/common/Skeleton';
 
 // Reusable stat card
@@ -45,6 +46,7 @@ export default function Delegation() {
 
   // Filters state
   const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [statusFilter, setStatusFilter] = useState('All');
   const [permissionFilter, setPermissionFilter] = useState('All');
 
@@ -78,7 +80,7 @@ export default function Delegation() {
     const getVendorNameStr = (id) => vendors.find(v => v.id === id)?.name || id;
 
     return delegations.filter(del => {
-      const searchLower = searchQuery.toLowerCase();
+      const searchLower = debouncedSearchQuery.toLowerCase();
       const delegatorName = getVendorNameStr(del.delegatorId).toLowerCase();
       const delegateeName = getVendorNameStr(del.delegateeId).toLowerCase();
       
@@ -90,7 +92,7 @@ export default function Delegation() {
       const matchesPermissionText = permissionLabels.some(label => label.includes(searchLower));
 
       const matchesSearch = 
-        !searchQuery ||
+        !debouncedSearchQuery ||
         delegatorName.includes(searchLower) ||
         delegateeName.includes(searchLower) ||
         matchesPermissionText;
@@ -100,7 +102,7 @@ export default function Delegation() {
 
       return matchesSearch && matchesStatus && matchesPermission;
     });
-  }, [delegations, vendors, searchQuery, statusFilter, permissionFilter]);
+  }, [delegations, vendors, debouncedSearchQuery, statusFilter, permissionFilter]);
 
   // Handlers
   const handleAddClick = () => {

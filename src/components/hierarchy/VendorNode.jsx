@@ -1,6 +1,6 @@
 import Ripple from '../common/Ripple';
 import { useState } from 'react';
-import { ChevronRight, ChevronDown, Building2, Users, Car, CheckCircle2, Clock, AlertCircle, ArrowRightLeft } from 'lucide-react';
+import { ChevronRight, ChevronDown, Building2, Users, Car, ArrowRightLeft } from 'lucide-react';
 
 export default function VendorNode({ vendor, level = 0, onSelect, selectedId, onMoveUser }) {
   const [isExpanded, setIsExpanded] = useState(true);
