@@ -2,8 +2,6 @@
 
 Vendor Management System is a responsive, professional frontend application designed to streamline the management of cab vendors, drivers, vehicles, organizational hierarchy, compliance documents, delegation, and reporting. Built for operational efficiency, it features a clean and interactive user interface to handle complex datasets and nested vendor relationships seamlessly.
 
-[REAL DASHBOARD SCREENSHOT]
-
 ## Live Demo
 [https://vendor-managment-sytem.netlify.app/](https://vendor-managment-sytem.netlify.app/)
 
@@ -30,8 +28,6 @@ Vendor Management System is a responsive, professional frontend application desi
 ## Vendor Hierarchy
 
 The application supports a robust multi-tier organizational structure:
-
-[OPTIONAL HIERARCHY DIAGRAM]
 
 Super Vendor
 → Regional Vendor
@@ -132,28 +128,28 @@ This project is deployed on Netlify. It includes Single Page Application (SPA) r
 ## Screenshots
 
 ### Dashboard
-<!-- Add dashboard screenshot here -->
+![Dashboard](./screenshots/dashboard.png)
 
 ### Vendor Management
-<!-- Add vendor screenshot here -->
+![Vendor Management](./screenshots/vendors.png)
 
 ### Driver Management
-<!-- Add driver screenshot here -->
+![Driver Management](./screenshots/drivers.png)
 
 ### Vehicle Management
-<!-- Add vehicle screenshot here -->
+![Vehicle Management](./screenshots/vehicles.png)
 
 ### Vendor Hierarchy
-<!-- Add hierarchy screenshot here -->
+![Vendor Hierarchy](./screenshots/hierarchy.png)
 
 ### Documents & Compliance
-<!-- Add documents screenshot here -->
+![Documents & Compliance](./screenshots/documents.png)
 
 ### Delegation & Permissions
-<!-- Add delegation screenshot here -->
+![Delegation & Permissions](./screenshots/delegation.png)
 
 ### Reports
-<!-- Add reports screenshot here -->
+![Reports](./screenshots/reports.png)
 
 ## Limitations
 
