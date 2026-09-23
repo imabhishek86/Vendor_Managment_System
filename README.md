@@ -165,6 +165,9 @@ This project is deployed on Netlify. It includes Single Page Application (SPA) r
 ### Reports
 ![Reports](./Screenshots/reports.png)
 
+### Settings
+![Settings](./Screenshots/settings.png)
+
 ## Lighthouse Performance
 
 The application was also tested using Google Lighthouse to evaluate performance, accessibility, best practices, and SEO.
