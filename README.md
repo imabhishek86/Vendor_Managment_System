@@ -46,6 +46,20 @@ To demonstrate performance and data handling, the frontend includes realistic, p
 
 Search and filtering operations are performed on the entire dataset *before* pagination is applied, ensuring accurate results while maintaining smooth performance for large lists. *(Note: This data is generated for demonstration purposes and does not represent real production data).*
 
+## Performance
+
+Performance was measured with Lighthouse in Chrome DevTools against the deployed build in desktop mode. The application scored **95 for Performance**, **86 for Accessibility**, **100 for Best Practices** and **82 for SEO**, with the following Core Web Vitals:
+
+- **First Contentful Paint — 1.5 s**
+- **Largest Contentful Paint — 2.9 s**
+- **Total Blocking Time — 0 ms**, confirming the main thread stays free during the tested Lighthouse run with 1000 drivers held in memory. This is supported by capping tables at 20 rows per page and debouncing search input.
+- **Cumulative Layout Shift — 0.003**, indicating minimal visible layout movement during the tested run, with skeleton loaders occupying the same space as the content they replace.
+- **Speed Index — 1.5 s**
+
+Largest Contentful Paint is the weakest performance metric in the tested run, as the application currently ships as a single JavaScript bundle that must be parsed before the dashboard paints. Route-level code splitting using `React.lazy` is an intended future optimization.
+
+The lower Accessibility and SEO scores are not performance-related: a few colour combinations fall below the required contrast ratio, and the page currently lacks a meta description. The SPA redirect configuration also serves `/robots.txt`.
+
 ## Documents & Compliance
 
 The system includes a comprehensive compliance flow to track document statuses, expiry dates, and verification logic. Administrators can simulate document uploads, manually verify or reject submissions, and monitor expiring licenses. 
@@ -150,6 +164,16 @@ This project is deployed on Netlify. It includes Single Page Application (SPA) r
 
 ### Reports
 ![Reports](./Screenshots/reports.png)
+
+## Lighthouse Performance
+
+The application was also tested using Google Lighthouse to evaluate performance, accessibility, best practices, and SEO.
+
+### Lighthouse Test 1
+![Lighthouse Test 1](./Screenshots/Lighthouse1.jpeg)
+
+### Lighthouse Test 2
+![Lighthouse Test 2](./Screenshots/Lighthouse2.jpeg)
 
 ## Limitations
 
