@@ -1,8 +1,12 @@
 import Ripple from '../common/Ripple';
 import { useState } from 'react';
 import { ChevronRight, ChevronDown, Building2, Users, Car, ArrowRightLeft } from 'lucide-react';
+import { useDriverContext } from '../../context/DriverContext';
+import { useVehicleContext } from '../../context/VehicleContext';
 
 export default function VendorNode({ vendor, level = 0, onSelect, selectedId, onMoveUser }) {
+  const { drivers } = useDriverContext();
+  const { vehicles } = useVehicleContext();
   const [isExpanded, setIsExpanded] = useState(true);
   const hasChildren = vendor.children && vendor.children.length > 0;
   const isSelected = selectedId === vendor.id;
@@ -57,8 +61,8 @@ export default function VendorNode({ vendor, level = 0, onSelect, selectedId, on
               </div>
               <div className="text-xs text-slate-500 flex items-center gap-3 mt-1">
                 <span className="truncate">{vendor.type}</span>
-                <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {vendor.metrics.drivers}</span>
-                <span className="flex items-center gap-1"><Car className="w-3 h-3" /> {vendor.metrics.vehicles}</span>
+                <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {drivers.filter(d => d.vendorId === vendor.id).length}</span>
+                <span className="flex items-center gap-1"><Car className="w-3 h-3" /> {vehicles.filter(v => v.vendorId === vendor.id).length}</span>
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, CheckCircle2 } from 'lucide-react';
 import DataTable from '../components/common/DataTable';
+import Pagination from '../components/common/Pagination';
 import { useDriverContext } from '../context/DriverContext';
 import { useVendorContext } from '../context/VendorContext';
 import DriverStatusBadge from '../components/driver/DriverStatusBadge';
@@ -31,6 +32,15 @@ export default function Drivers() {
   const [statusFilter, setStatusFilter] = useState('All');
   const [licenseFilter, setLicenseFilter] = useState('All');
   const [documentFilter, setDocumentFilter] = useState('All');
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 20;
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchQuery, vendorFilter, statusFilter, licenseFilter, documentFilter]);
 
   // Modals state
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -70,6 +80,11 @@ export default function Drivers() {
       return matchesSearch && matchesVendor && matchesStatus && matchesLicense && matchesDoc;
     });
   }, [drivers, vendors, debouncedSearchQuery, vendorFilter, statusFilter, licenseFilter, documentFilter]);
+
+  const paginatedDrivers = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return filteredDrivers.slice(startIndex, startIndex + pageSize);
+  }, [filteredDrivers, currentPage]);
 
   // Handlers
   const handleAddClick = () => {
@@ -259,12 +274,23 @@ export default function Drivers() {
             <p className="text-sm text-slate-500">Try adjusting your search or filter criteria.</p>
           </div>
         ) : (
-          <DataTable 
-            columns={columns} 
-            data={filteredDrivers} 
-            title="Registered Drivers" 
-            description={`Showing ${filteredDrivers.length} matching drivers.`}
-          />
+          <div className="flex flex-col flex-1 h-full">
+            <div className="flex-1 overflow-auto">
+              <DataTable 
+                columns={columns} 
+                data={paginatedDrivers} 
+                title="Registered Drivers" 
+                description={`Showing ${filteredDrivers.length} matching drivers.`}
+              />
+            </div>
+            <Pagination 
+              currentPage={currentPage}
+              totalPages={Math.ceil(filteredDrivers.length / pageSize)}
+              totalItems={filteredDrivers.length}
+              pageSize={pageSize}
+              onPageChange={setCurrentPage}
+            />
+          </div>
         )}
       </div>
 

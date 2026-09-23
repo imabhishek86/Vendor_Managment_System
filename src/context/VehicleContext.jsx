@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { mockVehicles } from '../data/mockVehicles';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 
 const VehicleContext = createContext();
 
@@ -7,8 +8,14 @@ export function useVehicleContext() {
   return useContext(VehicleContext);
 }
 
+const STORAGE_KEY = 'vendor-management-vehicles';
+
 export function VehicleProvider({ children }) {
-  const [vehicles, setVehicles] = useState(mockVehicles);
+  const [vehicles, setVehicles] = useState(() => loadFromStorage(STORAGE_KEY, mockVehicles));
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEY, vehicles);
+  }, [vehicles]);
 
   const addVehicle = (vehicle) => {
     const newId = `VH-${String(Math.max(...vehicles.map(v => parseInt(v.id.replace('VH-', '')) || 0)) + 1).padStart(3, '0')}`;

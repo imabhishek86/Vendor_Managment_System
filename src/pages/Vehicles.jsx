@@ -3,6 +3,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, CheckCircle2 } from 'lucide-react';
 import DataTable from '../components/common/DataTable';
+import Pagination from '../components/common/Pagination';
 import StatusBadge from '../components/common/StatusBadge';
 import { useVehicleContext } from '../context/VehicleContext';
 import { useVendorContext } from '../context/VendorContext';
@@ -35,6 +36,15 @@ export default function Vehicles() {
   const [vendorFilter, setVendorFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [insuranceFilter, setInsuranceFilter] = useState('All');
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 20;
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchQuery, typeFilter, vendorFilter, statusFilter, insuranceFilter]);
 
   // Modals state
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -79,6 +89,11 @@ export default function Vehicles() {
       return matchesSearch && matchesType && matchesVendor && matchesStatus && matchesInsurance;
     });
   }, [vehicles, vendors, drivers, debouncedSearchQuery, typeFilter, vendorFilter, statusFilter, insuranceFilter]);
+
+  const paginatedVehicles = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return filteredVehicles.slice(startIndex, startIndex + pageSize);
+  }, [filteredVehicles, currentPage]);
 
   // Handlers
   const handleAddClick = () => {
@@ -267,12 +282,23 @@ export default function Vehicles() {
             <p className="text-sm text-slate-500">Try adjusting your search or filter criteria.</p>
           </div>
         ) : (
-          <DataTable 
-            columns={columns} 
-            data={filteredVehicles} 
-            title="Registered Vehicles" 
-            description={`Showing ${filteredVehicles.length} matching vehicles.`}
-          />
+          <div className="flex flex-col flex-1 h-full">
+            <div className="flex-1 overflow-auto">
+              <DataTable 
+                columns={columns} 
+                data={paginatedVehicles} 
+                title="Registered Vehicles" 
+                description={`Showing ${filteredVehicles.length} matching vehicles.`}
+              />
+            </div>
+            <Pagination 
+              currentPage={currentPage}
+              totalPages={Math.ceil(filteredVehicles.length / pageSize)}
+              totalItems={filteredVehicles.length}
+              pageSize={pageSize}
+              onPageChange={setCurrentPage}
+            />
+          </div>
         )}
       </div>
 

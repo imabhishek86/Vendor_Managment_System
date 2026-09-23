@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { mockDelegations } from '../data/delegationData';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 
 const DelegationContext = createContext();
 
@@ -7,8 +8,14 @@ export function useDelegationContext() {
   return useContext(DelegationContext);
 }
 
+const STORAGE_KEY = 'vendor-management-delegations';
+
 export function DelegationProvider({ children }) {
-  const [delegations, setDelegations] = useState(mockDelegations);
+  const [delegations, setDelegations] = useState(() => loadFromStorage(STORAGE_KEY, mockDelegations));
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEY, delegations);
+  }, [delegations]);
 
   const createDelegation = (data) => {
     const newId = `del${String(Math.max(...delegations.map(d => parseInt(d.id.replace('del', '')) || 0)) + 1).padStart(3, '0')}`;

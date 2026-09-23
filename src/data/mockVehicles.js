@@ -1,4 +1,7 @@
-export const mockVehicles = [
+import { generateVehicles } from './generators';
+import { mockVendors } from './mockVendors';
+
+const baseVehicles = [
   {
     id: 'VH-101',
     make: 'Toyota',
@@ -90,3 +93,5 @@ export const mockVehicles = [
     permitExpiry: '2026-11-20'
   }
 ];
+
+export const mockVehicles = [...baseVehicles, ...generateVehicles(594, mockVendors, baseVehicles.length)];

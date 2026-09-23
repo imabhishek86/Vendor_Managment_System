@@ -1,4 +1,6 @@
-export const mockVendors = [
+import { generateVendors } from './generators';
+
+const baseVendors = [
   {
     id: 'V1',
     name: 'Global Fleet Inc.',
@@ -8,7 +10,7 @@ export const mockVendors = [
     status: 'Active',
     type: 'Master Vendor',
     parentId: null,
-    metrics: { drivers: 145, vehicles: 120 },
+
     joinDate: '2023-01-15'
   },
   {
@@ -20,7 +22,7 @@ export const mockVendors = [
     status: 'Active',
     type: 'Sub Vendor',
     parentId: 'V1',
-    metrics: { drivers: 45, vehicles: 40 },
+
     joinDate: '2023-03-22'
   },
   {
@@ -32,7 +34,7 @@ export const mockVendors = [
     status: 'Pending',
     type: 'Sub Vendor',
     parentId: 'V1',
-    metrics: { drivers: 15, vehicles: 10 },
+
     joinDate: '2024-01-10'
   },
   {
@@ -44,7 +46,7 @@ export const mockVendors = [
     status: 'Active',
     type: 'Master Vendor',
     parentId: null,
-    metrics: { drivers: 80, vehicles: 75 },
+
     joinDate: '2022-11-05'
   },
   {
@@ -56,7 +58,7 @@ export const mockVendors = [
     status: 'Suspended',
     type: 'Sub Vendor',
     parentId: 'V4',
-    metrics: { drivers: 25, vehicles: 20 },
+
     joinDate: '2023-06-18'
   },
   {
@@ -68,7 +70,9 @@ export const mockVendors = [
     status: 'Active',
     type: 'Sub Vendor',
     parentId: 'V2',
-    metrics: { drivers: 12, vehicles: 12 },
+
     joinDate: '2023-08-30'
   }
 ];
+
+export const mockVendors = [...baseVendors, ...generateVendors(194, baseVendors.length)];

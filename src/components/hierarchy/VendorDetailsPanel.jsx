@@ -1,6 +1,11 @@
 import { Building2, Mail, Phone, Calendar, Users, Car } from 'lucide-react';
+import { useDriverContext } from '../../context/DriverContext';
+import { useVehicleContext } from '../../context/VehicleContext';
 
 export default function VendorDetailsPanel({ vendor }) {
+  const { drivers } = useDriverContext();
+  const { vehicles } = useVehicleContext();
+  
   if (!vendor) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 h-full flex flex-col items-center justify-center p-8 text-center text-slate-500">
@@ -29,14 +34,14 @@ export default function VendorDetailsPanel({ vendor }) {
               <Users className="w-4 h-4" />
               <span className="text-xs font-medium uppercase tracking-wider">Total Drivers</span>
             </div>
-            <p className="text-2xl font-semibold text-slate-900">{vendor.metrics.drivers}</p>
+            <p className="text-2xl font-semibold text-slate-900">{drivers.filter(d => d.vendorId === vendor.id).length}</p>
           </div>
           <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
             <div className="flex items-center gap-2 text-slate-500 mb-1">
               <Car className="w-4 h-4" />
               <span className="text-xs font-medium uppercase tracking-wider">Total Vehicles</span>
             </div>
-            <p className="text-2xl font-semibold text-slate-900">{vendor.metrics.vehicles}</p>
+            <p className="text-2xl font-semibold text-slate-900">{vehicles.filter(v => v.vendorId === vendor.id).length}</p>
           </div>
         </div>
       </div>

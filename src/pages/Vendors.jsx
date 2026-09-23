@@ -3,8 +3,11 @@ import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, CheckCircle2 } from 'lucide-react';
 import DataTable from '../components/common/DataTable';
+import Pagination from '../components/common/Pagination';
 import StatusBadge from '../components/common/StatusBadge';
 import { useVendorContext } from '../context/VendorContext';
+import { useDriverContext } from '../context/DriverContext';
+import { useVehicleContext } from '../context/VehicleContext';
 import VendorFormModal from '../components/vendor/VendorFormModal';
 import StatusConfirmDialog from '../components/vendor/StatusConfirmDialog';
 import useDebounce from '../hooks/useDebounce';
@@ -12,6 +15,8 @@ import { SkeletonTable } from '../components/common/Skeleton';
 
 export default function Vendors() {
   const { vendors, addVendor, editVendor, updateVendorStatus } = useVendorContext();
+  const { drivers } = useDriverContext();
+  const { vehicles } = useVehicleContext();
   const navigate = useNavigate();
   
   // Loading state
@@ -27,6 +32,15 @@ export default function Vendors() {
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [typeFilter, setTypeFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 20;
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchQuery, typeFilter, statusFilter]);
 
   // Modals state
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -61,6 +75,11 @@ export default function Vendors() {
       return matchesSearch && matchesType && matchesStatus;
     });
   }, [vendors, debouncedSearchQuery, typeFilter, statusFilter]);
+
+  const paginatedVendors = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return filteredVendors.slice(startIndex, startIndex + pageSize);
+  }, [filteredVendors, currentPage]);
 
   // Handlers
   const handleAddClick = () => {
@@ -124,8 +143,8 @@ export default function Vendors() {
         <div className="text-xs text-slate-500">{row.email}</div>
       </div>
     )},
-    { header: 'Drivers', accessor: 'drivers', render: (row) => row.metrics?.drivers || 0 },
-    { header: 'Vehicles', accessor: 'vehicles', render: (row) => row.metrics?.vehicles || 0 },
+    { header: 'Drivers', accessor: 'drivers', render: (row) => drivers.filter(d => d.vendorId === row.id).length },
+    { header: 'Vehicles', accessor: 'vehicles', render: (row) => vehicles.filter(v => v.vendorId === row.id).length },
     { 
       header: 'Status', 
       accessor: 'status',
@@ -229,12 +248,23 @@ export default function Vendors() {
             <p className="text-sm text-slate-500">Try adjusting your search or filter criteria.</p>
           </div>
         ) : (
-          <DataTable 
-            columns={columns} 
-            data={filteredVendors} 
-            title="Registered Vendors" 
-            description={`Showing ${filteredVendors.length} matching vendors.`}
-          />
+          <div className="flex flex-col flex-1 h-full">
+            <div className="flex-1 overflow-auto">
+              <DataTable 
+                columns={columns} 
+                data={paginatedVendors} 
+                title="Registered Vendors" 
+                description={`Showing ${filteredVendors.length} matching vendors.`}
+              />
+            </div>
+            <Pagination 
+              currentPage={currentPage}
+              totalPages={Math.ceil(filteredVendors.length / pageSize)}
+              totalItems={filteredVendors.length}
+              pageSize={pageSize}
+              onPageChange={setCurrentPage}
+            />
+          </div>
         )}
       </div>
 

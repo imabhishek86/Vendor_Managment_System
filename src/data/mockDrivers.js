@@ -1,4 +1,7 @@
-export const mockDrivers = [
+import { generateDrivers } from './generators';
+import { mockVendors } from './mockVendors';
+
+const baseDrivers = [
   {
     id: 'D001',
     name: 'Michael Chang',
@@ -60,3 +63,5 @@ export const mockDrivers = [
     phone: '+1 (555) 888-9999'
   }
 ];
+
+export const mockDrivers = [...baseDrivers, ...generateDrivers(994, mockVendors, baseDrivers.length)];

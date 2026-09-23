@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { mockDocuments } from '../data/mockDocuments';
 import { getExpiryStatus } from '../utils/dateStatus';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 
 const DocumentContext = createContext();
 
@@ -8,8 +9,14 @@ export function useDocumentContext() {
   return useContext(DocumentContext);
 }
 
+const STORAGE_KEY = 'vendor-management-documents';
+
 export function DocumentProvider({ children }) {
-  const [documents, setDocuments] = useState(mockDocuments);
+  const [documents, setDocuments] = useState(() => loadFromStorage(STORAGE_KEY, mockDocuments));
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEY, documents);
+  }, [documents]);
 
   const addDocument = (document) => {
     const newId = `doc${String(Math.max(...documents.map(d => parseInt(d.id.replace('doc', '')) || 0)) + 1).padStart(3, '0')}`;

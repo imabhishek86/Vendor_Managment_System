@@ -1,12 +1,16 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Building2, Phone, Mail, Users, Shield, Clock, CheckCircle2, Network, Car } from 'lucide-react';
 import { useVendorContext } from '../context/VendorContext';
+import { useDriverContext } from '../context/DriverContext';
+import { useVehicleContext } from '../context/VehicleContext';
 import StatusBadge from '../components/common/StatusBadge';
 
 export default function VendorDetails() {
   const { vendorId } = useParams();
   const navigate = useNavigate();
   const { vendors } = useVendorContext();
+  const { drivers } = useDriverContext();
+  const { vehicles } = useVehicleContext();
 
   const vendor = vendors.find(v => v.id === vendorId);
   
@@ -124,14 +128,14 @@ export default function VendorDetails() {
                   <div className="bg-white p-2 rounded shadow-sm text-blue-600"><Users className="w-5 h-5" /></div>
                   <span className="font-medium text-slate-700">Total Drivers</span>
                 </div>
-                <span className="text-xl font-bold text-slate-900">{vendor.metrics?.drivers || 0}</span>
+                <span className="text-xl font-bold text-slate-900">{drivers.filter(d => d.vendorId === vendor.id).length}</span>
               </div>
               <div className="flex items-center justify-between p-3 bg-indigo-50 rounded-lg border border-indigo-100">
                 <div className="flex items-center gap-3">
                   <div className="bg-white p-2 rounded shadow-sm text-indigo-600"><Car className="w-5 h-5" /></div>
                   <span className="font-medium text-slate-700">Total Vehicles</span>
                 </div>
-                <span className="text-xl font-bold text-slate-900">{vendor.metrics?.vehicles || 0}</span>
+                <span className="text-xl font-bold text-slate-900">{vehicles.filter(v => v.vendorId === vendor.id).length}</span>
               </div>
             </div>
           </div>

@@ -1,11 +1,20 @@
 import { Activity, TrendingUp } from 'lucide-react';
+import { useDriverContext } from '../context/DriverContext';
+import { useVehicleContext } from '../context/VehicleContext';
+import { useDelegationContext } from '../context/DelegationContext';
+import { useDocumentContext } from '../context/DocumentContext';
 
 export default function Reports() {
+  const { drivers } = useDriverContext();
+  const { vehicles } = useVehicleContext();
+  const { delegations } = useDelegationContext();
+  const { documents, getResolvedStatus } = useDocumentContext();
+
   const metrics = [
-    { label: 'Overall Compliance', value: '94%', trend: '+2.4%', good: true },
-    { label: 'Active Drivers', value: '856', trend: '+12', good: true },
-    { label: 'Vehicles in Maintenance', value: '34', trend: '-5', good: true },
-    { label: 'Pending Delegations', value: '18', trend: '+4', good: false },
+    { label: 'Overall Compliance', value: `${documents.length ? Math.round((documents.filter(d => getResolvedStatus(d) === 'Verified').length / documents.length) * 100) : 100}%`, trend: '', good: true },
+    { label: 'Active Drivers', value: drivers.filter(d => d.status === 'Active').length.toString(), trend: '', good: true },
+    { label: 'Vehicles in Maintenance', value: vehicles.filter(v => v.status === 'Maintenance').length.toString(), trend: '', good: true },
+    { label: 'Active Delegations', value: delegations.filter(d => d.status === 'Active').length.toString(), trend: '', good: true },
   ];
 
   const complianceData = [

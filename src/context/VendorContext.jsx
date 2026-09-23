@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { mockVendors } from '../data/mockVendors';
+import { loadFromStorage, saveToStorage } from '../utils/storage';
 
 const VendorContext = createContext();
 
@@ -7,8 +8,14 @@ export function useVendorContext() {
   return useContext(VendorContext);
 }
 
+const STORAGE_KEY = 'vendor-management-vendors';
+
 export function VendorProvider({ children }) {
-  const [vendors, setVendors] = useState(mockVendors);
+  const [vendors, setVendors] = useState(() => loadFromStorage(STORAGE_KEY, mockVendors));
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEY, vendors);
+  }, [vendors]);
 
   const addVendor = (vendor) => {
     // Generate a simple mock ID
@@ -17,7 +24,7 @@ export function VendorProvider({ children }) {
     const newVendor = {
       ...vendor,
       id: newId,
-      metrics: { drivers: 0, vehicles: 0 },
+
       joinDate: new Date().toISOString().split('T')[0]
     };
     
