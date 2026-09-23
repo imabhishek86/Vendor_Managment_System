@@ -69,7 +69,7 @@ export default function Settings() {
                   AD
                 </div>
                 <div>
-                  <button type="button" className="px-4 py-2 bg-white border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 relative overflow-hidden transition-all duration-200">
+                  <button type="button" onClick={() => setNotification('Avatar upload coming soon.')} className="px-4 py-2 bg-white border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 relative overflow-hidden transition-all duration-200">
         <Ripple color="rgba(0, 0, 0, 0.1)" />
                     Change Avatar
                   </button>
@@ -119,7 +119,7 @@ export default function Settings() {
               </div>
 
               <div className="mt-8 flex justify-end gap-3 pt-6 border-t border-slate-200">
-                <button type="button" className="px-4 py-2 bg-white border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 relative overflow-hidden transition-all duration-200">
+                <button type="button" onClick={() => { setActiveTab(''); setTimeout(() => setActiveTab('profile'), 0); }} className="px-4 py-2 bg-white border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 hover:bg-slate-50 relative overflow-hidden transition-all duration-200">
         <Ripple color="rgba(0, 0, 0, 0.1)" />
                   Cancel
                 </button>

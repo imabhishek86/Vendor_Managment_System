@@ -190,7 +190,7 @@ export default function Header({ toggleSidebar }) {
           )}
         </div>
         
-        <button className="p-2 text-slate-500 hover:text-slate-700 rounded-lg hover:bg-slate-100 relative overflow-hidden transition-all duration-200">
+        <button onClick={() => navigate('/settings')} className="p-2 text-slate-500 hover:text-slate-700 rounded-lg hover:bg-slate-100 relative overflow-hidden transition-all duration-200">
         <Ripple color="rgba(0, 0, 0, 0.1)" />
           <Bell className="w-5 h-5" />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
