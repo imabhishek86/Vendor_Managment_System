@@ -103,7 +103,7 @@ export default function VendorFormModal({ isOpen, onClose, onSubmit, allVendors,
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 overflow-y-auto">
       <div 
-        className="bg-white rounded-xl shadow-xl w-full max-w-2xl flex flex-col my-8 animate-modal-enter"
+        className="bg-white rounded-xl shadow-xl w-full max-w-2xl flex flex-col max-h-[90vh] my-8 animate-modal-enter"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
@@ -118,7 +118,7 @@ export default function VendorFormModal({ isOpen, onClose, onSubmit, allVendors,
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col flex-1">
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
           <div className="p-6 overflow-y-auto space-y-5">
             {error && (
               <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-100">

@@ -143,8 +143,8 @@ export default function Header({ toggleSidebar }) {
         </h1>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="relative hidden md:block" ref={searchRef}>
+      <div className="flex flex-1 items-center gap-2 sm:gap-4 justify-end">
+        <div className="relative w-full max-w-[180px] sm:max-w-none sm:w-72" ref={searchRef}>
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input 
             type="text" 
@@ -152,7 +152,7 @@ export default function Header({ toggleSidebar }) {
             value={searchQuery}
             onChange={handleInputChange}
             onFocus={() => { if (searchQuery) setIsDropdownOpen(true); }}
-            className="pl-9 pr-4 py-2 w-72 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
+            className="pl-9 pr-4 py-2 w-full rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
           />
           
           {/* Search Results Dropdown */}
